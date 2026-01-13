@@ -29,6 +29,11 @@
             gtk3
             webkitgtk_4_1
           ];
+
+        profile = ''
+          export XDG_CURRENT_DESKTOP="GNOME"
+        '';
+
         runScript = "${hytale-launcher-bin}/hytale-launcher";
       };
     };
