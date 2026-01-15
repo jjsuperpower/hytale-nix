@@ -1,0 +1,23 @@
+{
+  "version": "2026.01.14-cabac20",
+  "download_url": {
+    "linux": {
+      "amd64": {
+        "url": "https://launcher.hytale.com/builds/release/linux/amd64/hytale-launcher-2026.01.14-cabac20.zip",
+        "sha256": "6b4bfe603f707555ba7916eae381b8bb5e059d2032f7745b99cef9b3544592b3"
+      }
+    },
+    "darwin": {
+      "arm64": {
+        "url": "https://launcher.hytale.com/builds/release/darwin/arm64/hytale-launcher-2026.01.14-cabac20.zip",
+        "sha256": "64a3eef2232a1404c40ec70a767758e08efc6e899e9893215d9fdfa4fe37c8df"
+      }
+    },
+    "windows": {
+      "amd64": {
+        "url": "https://launcher.hytale.com/builds/release/windows/amd64/hytale-launcher-2026.01.14-cabac20.zip",
+        "sha256": "c4aa1ed5a976de9904b8f1a9d01b708e843ac93c08e91df684cce56decc86fcd"
+      }
+    }
+  }
+}
