@@ -46,6 +46,13 @@ jobs:
           OLD_VERSION=$(jq -r '.version' launcher.json)
           BRANCH_NAME="update-launcher-${NEW_VERSION}"
           
+          # Check if branch already exists
+          if git ls-remote --exit-code --heads origin "${BRANCH_NAME}" > /dev/null 2>&1; then
+            echo "Branch ${BRANCH_NAME} already exists. Exiting."
+            rm -f new-launcher.json
+            exit 0
+          fi
+          
           # Create and switch to new branch
           git checkout -b "${BRANCH_NAME}"
           
