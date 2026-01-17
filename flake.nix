@@ -7,50 +7,67 @@
     { self, nixpkgs }:
     let
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
-      json = builtins.fromJSON (builtins.readFile ./launcher.json);
 
-      version = json.version;
-      hytale-launcher-zip = pkgs.fetchurl {
-        url = "https://launcher.hytale.com/builds/release/linux/amd64/hytale-launcher-${version}.zip";
-        sha256 = json.download_url.linux.amd64.sha256;
-      };
+      hytale_json_url = "https://launcher.hytale.com/version/release/launcher.json";
 
-      hytale-launcher-bin = pkgs.runCommand "hytale-launcher-bin" {
-        buildInputs = [ pkgs.unzip ];
-      } ''
-        mkdir -p $out
-        unzip ${hytale-launcher-zip} -d $out
+      download-hytale = pkgs.writeScriptBin "download-hytale" ''
+        #!/usr/bin/env bash
+        set -euo pipefail
+
+        HYTALE_VERSION=$(${pkgs.curl}/bin/curl -s ${hytale_json_url} | ${pkgs.jq}/bin/jq -r '.version')
+        HYTALE_URL=$(${pkgs.curl}/bin/curl -s ${hytale_json_url} | ${pkgs.jq}/bin/jq -r '.download_url.linux.amd64.url')
+        HYTALE_SHA256=$(${pkgs.curl}/bin/curl -s ${hytale_json_url} | ${pkgs.jq}/bin/jq -r '.download_url.linux.amd64.sha256')
+        TEMP_DIR=$(mktemp -d)
+
+        echo "Downloading Hytale $HYTALE_VERSION launcher..."
+        ${pkgs.curl}/bin/curl -L -o "$TEMP_DIR/hytale-game.zip" "$HYTALE_URL"
+
+        echo "Verifying checksum..."
+        echo "$HYTALE_SHA256  $TEMP_DIR/hytale-game.zip" | ${pkgs.coreutils}/bin/sha256sum -c -
+
+        echo "Extracting game files..."
+        ${pkgs.unzip}/bin/unzip "$TEMP_DIR/hytale-game.zip" -d "$HOME/.hytale"
       '';
+
+      hytale-fhs = pkgs.buildFHSEnv {
+        name = "hytale-launcher";
+        targetPkgs = pkgs: with pkgs; [
+          # launcher
+          libsoup_3
+          gdk-pixbuf
+          glib
+          gtk3
+          webkitgtk_4_1
+
+          # Game
+          alsa-lib
+          icu
+          libGL
+          openssl
+          udev
+          xorg.libX11
+          xorg.libXcursor
+          xorg.libXrandr
+          xorg.libXi
+        ];
+
+        runScript = pkgs.writeScript "launch-hytale" ''
+          #!/usr/bin/env bash
+          set -euo pipefail
+
+          LAUNCHER_DIR="$HOME/.hytale"
+          if [ ! -d "$LAUNCHER_DIR" ]; then
+            echo "Hytale launcher not found locally"
+            ${download-hytale}/bin/download-hytale
+          fi
+
+          echo "Launching Hytale..."
+          "$LAUNCHER_DIR/hytale-launcher"
+        '';
+      };
     in
     {
       packages.x86_64-linux.default = self.packages.x86_64-linux.hytale-launcher;
-
-      packages.x86_64-linux.hytale-launcher = pkgs.buildFHSEnv {
-        pname = "hytale-launcher";
-        inherit version;
-
-        targetPkgs =
-          p: with p; [
-            # Launcher
-            libsoup_3
-            gdk-pixbuf
-            glib
-            gtk3
-            webkitgtk_4_1
-
-            # Game
-            alsa-lib
-            icu
-            libGL
-            openssl
-            udev
-            xorg.libX11
-            xorg.libXcursor
-            xorg.libXrandr
-            xorg.libXi
-          ];
-
-        runScript = "${hytale-launcher-bin}/hytale-launcher";
-      };
+      packages.x86_64-linux.hytale-launcher = hytale-fhs;
     };
 }
