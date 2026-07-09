@@ -1,22 +1,22 @@
 {
-  "version": "2026.01.12-e43ec47",
+  "version": "2026.07.07-325d709",
   "download_url": {
     "linux": {
       "amd64": {
-        "url": "https://launcher.hytale.com/builds/release/linux/amd64/hytale-launcher-2026.01.12-e43ec47.zip",
-        "sha256": "e3ff4eca14932ef7051dad5f1a9a646aca72b4b62f7ea263faa6f92fc03b76ab"
+        "url": "https://launcher.hytale.com/builds/release/linux/amd64/hytale-launcher-2026.07.07-325d709.zip",
+        "sha256": "a82e6afb90d1925d23aa63d175695c67d9f4b1829077098f9dc2ff22df4584cc"
       }
     },
     "darwin": {
       "arm64": {
-        "url": "https://launcher.hytale.com/builds/release/darwin/arm64/hytale-launcher-2026.01.14-cabac20.zip",
-        "sha256": "64a3eef2232a1404c40ec70a767758e08efc6e899e9893215d9fdfa4fe37c8df"
+        "url": "https://launcher.hytale.com/builds/release/darwin/arm64/hytale-launcher-2026.07.07-325d709.zip",
+        "sha256": "6e9de201cc32ade5f97bb067db26c747219d7b425f7f91f648c098067c1a6cec"
       }
     },
     "windows": {
       "amd64": {
-        "url": "https://launcher.hytale.com/builds/release/windows/amd64/hytale-launcher-2026.01.14-cabac20.zip",
-        "sha256": "c4aa1ed5a976de9904b8f1a9d01b708e843ac93c08e91df684cce56decc86fcd"
+        "url": "https://launcher.hytale.com/builds/release/windows/amd64/hytale-launcher-2026.07.07-325d709.zip",
+        "sha256": "5230310e0a6c71a1b57942619d96e615480be2d6e0d96f08be225e5d90b64a7e"
       }
     }
   }
